@@ -4,66 +4,66 @@ import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
-    String[] gameBoard = new String[9];
-    Arrays.fill(gameBoard, "square");
-    String Winner;
-
-    Winner = startGame(gameBoard);
-
-    System.out.println();
-    if (Objects.equals(Winner, "X")) {
-      System.out.println("Player 1 won!!");
-    }
-    if (Objects.equals(Winner, "O")) {
-      System.out.println("Player 2 won!!");
-    }
-    if (Objects.equals(Winner, "tie")) {
-      System.out.println("It's a tie!!");
-    }
-
+    String[] gameBoard = boardInitializer();
+    String winner = startGame(gameBoard);
+    printWinner(winner);
     printBoard(gameBoard);
   }
 
-  public static String startGame(String[] gameBoard) {
-    String gameWinner = "";
+  public static String[] boardInitializer() {
+    String[] gameBoard = new String[9];
+    Arrays.fill(gameBoard, "square");
+    return gameBoard;
+  }
 
-
-    while (gameWinner.isEmpty()) {
-      boolean played = false;
-      Scanner sc = new Scanner(System.in);
-
-      while (!played) {
-        printBoard(gameBoard);
-        System.out.print("Enter player 1 move (1-9):");
-        int playerOneMove = sc.nextInt() - 1;
-        if (!Objects.equals(gameBoard[playerOneMove], "square")) {
-          System.out.println("Invalid move, please try again!");
-          continue;
-        }
-
-        gameBoard[playerOneMove] = "X";
-        played = true;
+  public static void printBoard(String[] gameBoard) {
+    System.out.println();
+    for (int i = 0; i < gameBoard.length; i += 3) {
+      for (int j = 0; j < 3; j++) {
+        if (Objects.equals(gameBoard[j + i], "square")) System.out.print("⬜");
+        if (Objects.equals(gameBoard[j + i], "X")) System.out.print("✖️");
+        if (Objects.equals(gameBoard[j + i], "O")) System.out.print("⭕");
       }
-
-      gameWinner = checkWinner(gameBoard);
-      played = false;
-
-      while (!played && gameWinner.isEmpty()) {
-        printBoard(gameBoard);
-        System.out.print("Enter player 2 move (1-9):");
-        int playerTwoMove = sc.nextInt() - 1;
-        if (!Objects.equals(gameBoard[playerTwoMove], "square")) {
-          System.out.println("Invalid move, please try again!");
-          continue;
-        }
-
-        gameBoard[playerTwoMove] = "O";
-        played = true;
-      }
-
-      gameWinner = checkWinner(gameBoard);
+      System.out.println();
     }
-    return gameWinner;
+    System.out.println();
+  }
+
+  public static String startGame(String[] gameBoard) {
+    String winner = "";
+
+
+    while (winner.isEmpty()) {
+
+      gameMove(gameBoard, 1, winner);
+      winner = checkWinner(gameBoard);
+      gameMove(gameBoard, 2, winner);
+      winner = checkWinner(gameBoard);
+    }
+
+    return winner;
+  }
+
+  public static void gameMove(String[] gameBoard, int player, String gameWinner) {
+    boolean played = false;
+    Scanner sc = new Scanner(System.in);
+
+    while (!played && gameWinner.isEmpty()) {
+      printBoard(gameBoard);
+      System.out.print("Enter player " + player + " move (1-9):");
+      int playerMove = sc.nextInt() - 1;
+      if (!Objects.equals(gameBoard[playerMove], "square")) {
+        System.out.println("Invalid move, please try again!");
+        continue;
+      }
+      if (player == 1) {
+        gameBoard[playerMove] = "X";
+      } else if (player == 2) {
+        gameBoard[playerMove] = "O";
+      }
+
+      played = true;
+    }
   }
 
   public static String checkWinner(String[] gameBoard) {
@@ -92,17 +92,18 @@ public class Main {
     return "";
   }
 
-  public static void printBoard(String[] gameBoard) {
+  public static void printWinner(String winner) {
     System.out.println();
-    for (int i = 0; i < gameBoard.length; i += 3) {
-      for (int j = 0; j < 3; j++) {
-        if (Objects.equals(gameBoard[j + i], "square")) System.out.print("⬜");
-        if (Objects.equals(gameBoard[j + i], "X")) System.out.print("✖️");
-        if (Objects.equals(gameBoard[j + i], "O")) System.out.print("⭕");
-      }
-      System.out.println();
+    if (Objects.equals(winner, "X")) {
+      System.out.println("Player 1 won!!");
     }
-    System.out.println();
+    if (Objects.equals(winner, "O")) {
+      System.out.println("Player 2 won!!");
+    }
+    if (Objects.equals(winner, "tie")) {
+      System.out.println("It's a tie!!");
+    }
   }
+
 
 }
