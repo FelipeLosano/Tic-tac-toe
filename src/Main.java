@@ -17,8 +17,8 @@ public class Main {
     if (Objects.equals(Winner, "O")) {
       System.out.println("Player 2 won!!");
     }
-    if (Objects.equals(Winner, "square")) {
-      System.out.println("It's a toe!!");
+    if (Objects.equals(Winner, "tie")) {
+      System.out.println("It's a tie!!");
     }
 
     printBoard(gameBoard);
@@ -84,6 +84,9 @@ public class Main {
       if (samePlayerInAllPositions && !Objects.equals(line[0], "square")) {
         return line[0];
       }
+      if (!Arrays.asList(gameBoard).contains("square")) {
+        return "tie";
+      }
     }
 
     return "";
@@ -92,17 +95,12 @@ public class Main {
   public static void printBoard(String[] gameBoard) {
     System.out.println();
     for (int i = 0; i < gameBoard.length; i += 3) {
-
-      if (Objects.equals(gameBoard[i], "square")) System.out.print("⬜");
-      if (Objects.equals(gameBoard[i], "X")) System.out.print("✖️");
-      if (Objects.equals(gameBoard[i], "O")) System.out.print("⭕");
-      if (Objects.equals(gameBoard[i + 1], "square")) System.out.print("⬜");
-      if (Objects.equals(gameBoard[i + 1], "X")) System.out.print("✖️");
-      if (Objects.equals(gameBoard[i + 1], "O")) System.out.print("⭕");
-      if (Objects.equals(gameBoard[i + 2], "square")) System.out.println("⬜");
-      if (Objects.equals(gameBoard[i + 2], "X")) System.out.println("✖️");
-      if (Objects.equals(gameBoard[i + 2], "O")) System.out.println("⭕");
-
+      for (int j = 0; j < 3; j++) {
+        if (Objects.equals(gameBoard[j + i], "square")) System.out.print("⬜");
+        if (Objects.equals(gameBoard[j + i], "X")) System.out.print("✖️");
+        if (Objects.equals(gameBoard[j + i], "O")) System.out.print("⭕");
+      }
+      System.out.println();
     }
     System.out.println();
   }
